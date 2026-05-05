@@ -11,3 +11,7 @@ for (var i in champions) {
     }
 }
 console.log(tagsList);
+
+
+// partype
+// mana, energy, none, other (pode ser qql coisa)
