@@ -8508,6 +8508,58 @@
         "attackspeedperlevel": 2.11,
         "attackspeed": 0.681
       }
+    },
+    {
+      "id": "rKiNCuI7V3Q",
+      "key": "345345",
+      "name": "Marco",
+      "title": "Lorem Ipsum",
+      "blurb": "Phasellus mauris justo, ultrices vitae dictum elementum, porttitor sed felis. Aenean euismod augue a risus tincidunt, vitae sodales mi cursus. Morbi dapibus, erat non rhoncus commodo, arcu mauris pellentesque diam, in placerat ligula nisi sit amet nibh. Nunc rhoncus aliquam erat, sed ullamcorper erat aliquet sed. Donec suscipit venenatis ligula, non auctor arcu fermentum at. Maecenas a dictum sem, vel pretium enim.",
+      "tags": [
+        "Fighter",
+        "Mage",
+        "Assassin"
+      ],
+      "partype": "Heat",
+      "info": {
+        "attack": 5,
+        "defense": 5,
+        "magic": 5,
+        "difficulty": 5
+      },
+      "image": {
+        "full": "",
+        "sprite": "",
+        "group": "champion",
+        "x": 0,
+        "y": 0,
+        "w": 48,
+        "h": 48
+      },
+      "stats": {
+        "hp": 23432,
+        "hpperlevel": 334,
+        "mp": 12,
+        "mpperlevel": 2,
+        "movespeed": 2,
+        "armor": 2,
+        "armorperlevel": 2,
+        "spellblock": 2,
+        "spellblockperlevel": 2,
+        "attackrange": 2,
+        "hpregen": 2,
+        "hpregenperlevel": 2,
+        "mpregen": 2,
+        "mpregenperlevel": 2,
+        "crit": 2,
+        "critperlevel": 2,
+        "attackdamage": 2,
+        "attackdamageperlevel": 2,
+        "attackspeed": 2,
+        "attackspeedperlevel": 2
+      },
+      "version": "16.9.1"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

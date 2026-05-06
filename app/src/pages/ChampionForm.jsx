@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getChampionById, createChampion, updateChampion } from "../api/jsonServer";
+import { VERSION } from "../api/dataDragon";
 
 const ROLES = ["Fighter", "Mage", "Assassin", "Tank", "Support", "Marksman"];
-const PARTYPES = ["Mana", "Energy", "Fury", "Rage", "Flow", "Heat", "Ferocity", "Courage", "Grit", "None", ""];
+const PARTYPES = ["Mana", "Energy", "Fury", "Rage", "Flow", "Heat", "Ferocity", "Courage", "Grit", "Blood Well", "Shield", "None"];
 
 const emptyForm = {
   id: "",
@@ -22,27 +23,28 @@ const emptyForm = {
     attackspeed: 0, attackspeedperlevel: 0
   },
 };
+
 const statFields = [
   ["hp", "HP"],
-  ["hpperlevel", "HP por nível"],
+  ["hpperlevel", "HP per level"],
   ["mp", "Mana"],
-  ["mpperlevel", "Mana por nível"],
-  ["movespeed", "Move Speed"], 
-  ["armor", "Armor"], 
-  ["armorperlevel", "Armor por nível"],
-  ["spellblock", "Spell Block"],
-  ["spellblockperlevel", "Spell Block por nível"],
+  ["mpperlevel", "Mana per level"],
+  ["movespeed", "Move Speed"],
+  ["armor", "Armor"],
+  ["armorperlevel", "Armor per level"],
+  ["spellblock", "Magic Resist"],
+  ["spellblockperlevel", "Magic Resist per level"],
   ["attackrange", "Attack Range"],
   ["hpregen", "HP Regeneration"],
-  ["hpregenperlevel", "HP Regeneration por nível"],
+  ["hpregenperlevel", "HP Regeneration per level"],
   ["mpregen", "Mana Regeneration"],
-  ["mpregenperlevel", "Mana Regeneration por nível"],
+  ["mpregenperlevel", "Mana Regeneration per level"],
   ["crit", "Critical Strike Chance"],
-  ["critperlevel", "Critical Strike Chance por nível"],
+  ["critperlevel", "Critical Strike Chance per level"],
   ["attackdamage", "Attack Damage"],
-  ["attackdamageperlevel", "Attack Damage por nível"],
+  ["attackdamageperlevel", "Attack Damage per level"],
   ["attackspeed", "Attack Speed"],
-  ["attackspeedperlevel", "Attack Speed por nível"]
+  ["attackspeedperlevel", "Attack Speed per level"]
 ];
 
 export default function ChampionForm() {
@@ -57,7 +59,7 @@ export default function ChampionForm() {
     if (!isEdit) return;
     getChampionById(id)
       .then(setForm)
-      .catch(() => setError("Champion não encontrado"))
+      .catch(() => setError("Champion not found"))
       .finally(() => setLoading(false));
   }, [id, isEdit]);
 
@@ -68,62 +70,60 @@ export default function ChampionForm() {
       if (isEdit) {
         await updateChampion(id, form);
       } else {
-        await createChampion({ ...form, version: "16.8.1" });
+        await createChampion({ ...form, version: VERSION });
       }
       navigate("/admin");
     } catch {
-      setError("Erro ao guardar. Verifica se o JSON Server está a correr.");
+      setError("Error saving. Make sure the JSON Server is running.");
     }
   };
 
   const toggleTag = (tag) => {
     setForm((f) => ({
       ...f,
-      tags: f.tags.includes(tag)
-        ? f.tags.filter((t) => t !== tag)
-        : [...f.tags, tag],
+      tags: f.tags.includes(tag) ? f.tags.filter((t) => t !== tag) : [...f.tags, tag],
     }));
   };
 
-  if (loading) return <p>A carregar...</p>;
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div style={{ padding: "1rem", maxWidth: "600px", margin: "0 auto" }}>
-      <h1>{isEdit ? `Editar ${form.name}` : "Novo Champion"}</h1>
+      <h1>{isEdit ? `Edit ${form.name}` : "New Champion"}</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-        
+
         <label>ID: <input required value={form.id} onChange={(e) => setForm((f) => ({ ...f, id: e.target.value }))} disabled={isEdit} />
         </label>
 
         <label>Key: <input required value={form.key} onChange={(e) => setForm((f) => ({ ...f, key: e.target.value }))} />
         </label>
 
-        <label>Nome: <input required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
+        <label>Name: <input required value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
         </label>
 
-        <label>Título: <input required value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} />
+        <label>Title: <input required value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} />
         </label>
 
-        <label>Descrição (blurb): <br/><textarea rows={5} value={form.blurb} onChange={(e) => setForm((f) => ({ ...f, blurb: e.target.value }))} />
+        <label>Description (blurb): <textarea rows={5} value={form.blurb} onChange={(e) => setForm((f) => ({ ...f, blurb: e.target.value }))} />
         </label>
 
-        <label>Recurso (partype): <select value={form.partype} onChange={(e) => setForm((f) => ({ ...f, partype: e.target.value }))}>
-            {PARTYPES.map((p) => <option key={p} value={p}>{p || "Nenhum"}</option>)}
+        <label>Resource (partype): <select value={form.partype} onChange={(e) => setForm((f) => ({ ...f, partype: e.target.value }))}>
+            {PARTYPES.map((p) => <option key={p} value={p}>{p || "None"}</option>)}
           </select>
         </label>
 
         <fieldset>
           <legend>Roles</legend>
           {ROLES.map((r) => (
-            <label key={r} style={{ marginRight: "12px" }}>
+            <div><label key={r} style={{ marginRight: "12px" }}>
               {r}<input
                 type="checkbox"
                 checked={form.tags.includes(r)}
                 onChange={() => toggleTag(r)}
-              /> 
-            </label>
+              />
+            </label></div>
           ))}
         </fieldset>
 
@@ -140,11 +140,13 @@ export default function ChampionForm() {
             </label>
           ))}
         </fieldset>
+
         <fieldset>
-          <legend>Stats principais</legend>
+          <legend>Stats</legend>
           {statFields.map(([key, label]) => (
             <label key={key} style={{ display: "block", marginBottom: "3px" }}>
-              {label}: <br/><input
+              {label}: <br />
+              <input
                 type="number"
                 value={form.stats[key]}
                 onChange={(e) => setForm((f) => ({ ...f, stats: { ...f.stats, [key]: Number(e.target.value) } }))}
@@ -154,8 +156,8 @@ export default function ChampionForm() {
         </fieldset>
 
         <div style={{ display: "flex", gap: "12px" }}>
-          <button type="submit">{isEdit ? "Guardar" : "Criar"}</button>
-          <button type="button" onClick={() => navigate("/admin")}>Cancelar</button>
+          <button type="submit">{isEdit ? "Save" : "Create"}</button>
+          <button type="button" onClick={() => navigate("/admin")}>Cancel</button>
         </div>
       </form>
     </div>

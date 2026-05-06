@@ -24,7 +24,7 @@ export default function ChampionList() {
     });
   }, [all, search, role]);
 
-  if (loading) return <p>A carregar...</p>;
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div style={{ padding: "1rem" }}>
@@ -32,30 +32,29 @@ export default function ChampionList() {
 
       <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
         <input
-          placeholder="Pesquisar por nome..."
+          placeholder="Search by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="">Todas as roles</option>
+          <option value="">All roles</option>
           {ROLES.map((r) => (
             <option key={r} value={r}>{r}</option>
           ))}
         </select>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(130px, 2fr))", gap: "5px" }}>
         {filtered.map((c) => (
           <Link key={c.id} to={`/champion/${c.id}`} style={{ textDecoration: "none", textAlign: "center" }}>
             <img
               src={getChampionImageUrl(c.image.full)}
               alt={c.name}
-              width={80}
-              height={80}
-              style={{ borderRadius: "8px" }}
+              width={120}
+              style={{ borderRadius: "3px" }}
             />
-            <p style={{ margin: "4px 0", fontSize: "14px" }}>{c.name}</p>
-            <p style={{ fontSize: "12px", color: "var(--text)" }}>{c.tags.join(", ")}</p>
+            <p style={{ marginTop: "0px", fontSize: "14px" }}>{c.name}</p>
+            {/* <p style={{ fontSize: "12px", color: "var(--text)" }}>{c.tags.join(", ")}</p> */}
           </Link>
         ))}
       </div>
