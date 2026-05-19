@@ -1,0 +1,56 @@
+<div class="page">
+  <a routerLink="/" class="detail-back">← Back to Champions</a>
+
+  @if (loading()) {
+    <p class="loading-msg">Loading…</p>
+  } @else if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  } @else if (champion(); as c) {
+    <div
+      class="detail-splash"
+      [style.backgroundImage]="'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(' + getSplashUrl(c.id) + ')'"
+    >
+      <h1>{{ c.name }}</h1>
+      <p class="subtitle">{{ c.title }}</p>
+      <p>{{ c.lore ?? c.blurb }}</p>
+      <p><strong>Role(s):</strong> {{ c.tags.join(', ') }}</p>
+      <p><strong>Resource:</strong> {{ c.partype || 'None' }}</p>
+    </div>
+
+    <hr />
+
+    <h2>Info</h2>
+    <ul class="detail-stats-list">
+      <li>Attack: {{ c.info.attack }}/10</li>
+      <li>Defense: {{ c.info.defense }}/10</li>
+      <li>Magic: {{ c.info.magic }}/10</li>
+      <li>Difficulty: {{ c.info.difficulty }}/10</li>
+    </ul>
+
+    <hr />
+
+    <h2>Base Stats</h2>
+    <ul class="detail-stats-list">
+      <li>Health: {{ c.stats.hp }}</li>
+      <li>Health per level: {{ c.stats.hpperlevel }}</li>
+      <li>Mana: {{ c.stats.mp }}</li>
+      <li>Mana per level: {{ c.stats.mpperlevel }}</li>
+      <li>Move Speed: {{ c.stats.movespeed }}</li>
+      <li>Armor: {{ c.stats.armor }}</li>
+      <li>Armor per level: {{ c.stats.armorperlevel }}</li>
+      <li>Magic Resist: {{ c.stats.spellblock }}</li>
+      <li>Magic Resist per level: {{ c.stats.spellblockperlevel }}</li>
+      <li>Attack Range: {{ c.stats.attackrange }}</li>
+      <li>HP Regeneration: {{ c.stats.hpregen }}</li>
+      <li>HP Regeneration per level: {{ c.stats.hpregenperlevel }}</li>
+      <li>Mana Regeneration: {{ c.stats.mpregen }}</li>
+      <li>Mana Regeneration per level: {{ c.stats.mpregenperlevel }}</li>
+      <li>Critical Strike Chance: {{ c.stats.crit }}%</li>
+      <li>Critical Strike Chance per level: {{ c.stats.critperlevel }}%</li>
+      <li>Attack Damage: {{ c.stats.attackdamage }}</li>
+      <li>Attack Damage per level: {{ c.stats.attackdamageperlevel }}</li>
+      <li>Attack Speed: {{ c.stats.attackspeed }}</li>
+      <li>Attack Speed per level: {{ c.stats.attackspeedperlevel }}%</li>
+    </ul>
+  }
+</div>

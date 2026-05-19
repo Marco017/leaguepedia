@@ -1,0 +1,67 @@
+<div class="page">
+  <div class="admin-header">
+    <h1>Admin — Champions ({{ totalItems() }})</h1>
+    <a routerLink="/admin/new">+ New champion</a>
+  </div>
+
+  <div class="filters-bar">
+    <input
+      type="text"
+      placeholder="Filter by name…"
+      [ngModel]="nameFilter()"
+      (ngModelChange)="nameFilter.set($event); onFilterChange()"
+    />
+    <select [ngModel]="tagFilter()" (ngModelChange)="tagFilter.set($event); onFilterChange()">
+      <option value="">All roles</option>
+      @for (r of roles; track r) {
+        <option [value]="r">{{ r }}</option>
+      }
+    </select>
+    <select [ngModel]="partypeFilter()" (ngModelChange)="partypeFilter.set($event); onFilterChange()">
+      <option value="">All resource types</option>
+      @for (p of partypes; track p) {
+        <option [value]="p">{{ p }}</option>
+      }
+    </select>
+  </div>
+
+  @if (loading()) {
+    <p class="loading-msg">Loading…</p>
+  } @else if (champions().length === 0) {
+    <p class="empty-msg">
+      No champions found. <a routerLink="/admin/new">Create the first one!</a>
+    </p>
+  } @else {
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Title</th>
+          <th>Roles</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of champions(); track c.id) {
+          <tr>
+            <td>{{ c.name }}</td>
+            <td>{{ c.title }}</td>
+            <td>{{ c.tags.join(', ') }}</td>
+            <td>
+              <div class="table-actions">
+                <a [routerLink]="['/admin/edit', c.id]">Edit</a>
+                <button class="btn-delete" (click)="deleteChampion(c.id)">Delete</button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <app-pagination
+      [page]="page()"
+      [totalPages]="totalPages()"
+      (pageChange)="onPageChange($event)"
+    />
+  }
+</div>

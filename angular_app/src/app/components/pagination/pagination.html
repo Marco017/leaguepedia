@@ -1,0 +1,25 @@
+@if (totalPages() > 1) {
+  <div class="pagination">
+    <button (click)="goToPage(page() - 1)" [disabled]="page() === 1" aria-label="Previous page">
+      ← Prev
+    </button>
+
+    @for (p of pageNumbers(); track $index) {
+      @if (p === '…') {
+        <span class="pagination-info">…</span>
+      } @else {
+        <button
+          [class.active]="p === page()"
+          (click)="goToPage(p)"
+          [attr.aria-current]="p === page() ? 'page' : null"
+        >
+          {{ p }}
+        </button>
+      }
+    }
+
+    <button (click)="goToPage(page() + 1)" [disabled]="page() === totalPages()" aria-label="Next page">
+      Next →
+    </button>
+  </div>
+}

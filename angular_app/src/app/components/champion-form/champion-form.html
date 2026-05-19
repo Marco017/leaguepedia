@@ -1,0 +1,83 @@
+<div class="form-page">
+  <h1>{{ isEdit ? 'Edit — ' + form.value.name : 'New Champion' }}</h1>
+
+  @if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="loading-msg">Loading…</p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-layout">
+      <!-- Basic fields -->
+      <div class="form-field">
+        <label for="id">ID</label>
+        <input id="id" formControlName="id" required [attr.disabled]="isEdit ? true : null" />
+      </div>
+      <div class="form-field">
+        <label for="key">Key</label>
+        <input id="key" formControlName="key" required />
+      </div>
+      <div class="form-field">
+        <label for="name">Name</label>
+        <input id="name" formControlName="name" required />
+      </div>
+      <div class="form-field">
+        <label for="title">Title</label>
+        <input id="title" formControlName="title" required />
+      </div>
+      <div class="form-field">
+        <label for="blurb">Description (blurb)</label>
+        <textarea id="blurb" formControlName="blurb" rows="5"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label for="partype">Resource type</label>
+        <select id="partype" formControlName="partype">
+          @for (p of partypes; track p) {
+            <option [value]="p">{{ p || 'None' }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Roles (tags) -->
+      <fieldset class="form-fieldset">
+        <legend>Roles</legend>
+        @for (r of roles; track r) {
+          <label class="checkbox-row">
+            <input type="checkbox" [checked]="isTagChecked(r)" (change)="toggleTag(r)" />
+            {{ r }}
+          </label>
+        }
+      </fieldset>
+
+      <!-- Info sliders -->
+      <fieldset class="form-fieldset">
+        <legend>Info (0 – 10)</legend>
+        @for (stat of ['attack', 'defense', 'magic', 'difficulty']; track stat) {
+          <div class="range-row">
+            <label style="font-size:14px; min-width:80px; text-transform:capitalize">{{ stat }}</label>
+            <input type="range" min="0" max="10" [formControlName]="stat" formGroupName="info" />
+            <span>{{ form.get('info.' + stat)?.value }}</span>
+          </div>
+        }
+      </fieldset>
+
+      <!-- Base Stats -->
+      <fieldset class="form-fieldset">
+        <legend>Base Stats</legend>
+        @for (statField of statFields; track statField[0]) {
+          <div class="form-field" style="margin-bottom:6px">
+            <label [for]="'stat-' + statField[0]">{{ statField[1] }}</label>
+            <input type="number" [id]="'stat-' + statField[0]" [formControlName]="statField[0]" formGroupName="stats" />
+          </div>
+        }
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">{{ isEdit ? 'Save changes' : 'Create champion' }}</button>
+        <button type="button" class="btn-secondary" routerLink="/admin">Cancel</button>
+      </div>
+    </form>
+  }
+</div>
