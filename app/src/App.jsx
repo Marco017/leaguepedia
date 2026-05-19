@@ -7,7 +7,7 @@ import ChampionForm from "./pages/ChampionForm";
 function App() {
   return (
     <BrowserRouter>
-      <nav style={{ padding: "1rem", borderBottom: "1px solid var(--border)", display: "flex", gap: "1rem" }}>
+      <nav className="nav">
         <Link to="/">Champions</Link>
         <Link to="/admin">Admin</Link>
       </nav>

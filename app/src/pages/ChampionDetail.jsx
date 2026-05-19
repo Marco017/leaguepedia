@@ -1,43 +1,54 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getChampionById, getChampionImageUrl, getChampionSplashUrl } from "../api/dataDragon";
+import { getChampionById, getChampionSplashUrl } from "../api/dataDragon";
 
 export default function ChampionDetail() {
   const { id } = useParams();
   const [champion, setChampion] = useState(null);
-  
-  useEffect(() => {
-    getChampionById(id).then((champ) => {
-      setChampion(champ);
-      console.log(champ)
-    });
-  }, [id]);
-  if (!champion) return <p>Loading...</p>;
+  const [error, setError] = useState("");
 
-  const stats = champion.stats;
+  useEffect(() => {
+    getChampionById(id)
+      .then(setChampion)
+      .catch(() => setError("Champion not found."));
+  }, [id]);
+
+  if (error)    return <p className="error-msg" style={{ margin: "2rem" }}>{error}</p>;
+  if (!champion) return <p className="loading-msg">Loading…</p>;
+
+  const { stats } = champion;
 
   return (
-    <div>
-      <Link to="/">← Back</Link>
-      <div style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),url(${getChampionSplashUrl(champion.id)})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", padding: "2rem", borderRadius: "2px", color: "white", textShadow: "1px 1px black", backgroundPosition: "center"}}>
-        <h1>{champion.name}</h1>
-        <p style={{ fontStyle: "italic" }}>{champion.title}</p>
-        <p style={{ margin: "1rem 0" }}>{champion?.lore || champion.blurb}</p>
+    <div className="page">
+      <Link to="/" className="detail-back">← Back to Champions</Link>
 
+      <div
+        className="detail-splash"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${getChampionSplashUrl(champion.id)})`,
+        }}
+      >
+        <h1 style={{ margin: "0 0 4px" }}>{champion.name}</h1>
+        <p style={{ fontStyle: "italic", marginBottom: "1rem" }}>{champion.title}</p>
+        <p style={{ marginBottom: "1rem" }}>{champion.lore ?? champion.blurb}</p>
         <p><strong>Role(s):</strong> {champion.tags.join(", ")}</p>
         <p><strong>Resource:</strong> {champion.partype || "None"}</p>
       </div>
-      <hr/>
+
+      <hr />
+
       <h2>Info</h2>
-      <ul style={{ textAlign: "left" }}>
+      <ul className="detail-stats-list">
         <li>Attack: {champion.info.attack}/10</li>
         <li>Defense: {champion.info.defense}/10</li>
         <li>Magic: {champion.info.magic}/10</li>
         <li>Difficulty: {champion.info.difficulty}/10</li>
       </ul>
-      <hr/>
-      <h2>Base stats</h2>
-      <ul style={{ textAlign: "left" }}>
+
+      <hr />
+
+      <h2>Base Stats</h2>
+      <ul className="detail-stats-list">
         <li>Health: {stats.hp}</li>
         <li>Health per level: {stats.hpperlevel}</li>
         <li>Mana: {stats.mp}</li>

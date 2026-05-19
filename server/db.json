@@ -8511,7 +8511,7 @@
     },
     {
       "id": "rKiNCuI7V3Q",
-      "key": "345345",
+      "key": "1233",
       "name": "Marco",
       "title": "Lorem Ipsum",
       "blurb": "Phasellus mauris justo, ultrices vitae dictum elementum, porttitor sed felis. Aenean euismod augue a risus tincidunt, vitae sodales mi cursus. Morbi dapibus, erat non rhoncus commodo, arcu mauris pellentesque diam, in placerat ligula nisi sit amet nibh. Nunc rhoncus aliquam erat, sed ullamcorper erat aliquet sed. Donec suscipit venenatis ligula, non auctor arcu fermentum at. Maecenas a dictum sem, vel pretium enim.",
@@ -8560,6 +8560,5 @@
       },
       "version": "16.9.1"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }
