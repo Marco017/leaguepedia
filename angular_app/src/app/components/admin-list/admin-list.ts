@@ -44,7 +44,7 @@ export class AdminList {
     try {
       const result = await this.jsonService.getChampions({
         name: this.nameFilter() || undefined,
-        tag: this.tagFilter() || undefined,
+        //tag: this.tagFilter() || undefined,
         partype: this.partypeFilter() || undefined,
         page: this.page(),
         perPage: PER_PAGE,

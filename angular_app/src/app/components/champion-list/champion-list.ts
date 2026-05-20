@@ -33,7 +33,7 @@ export class ChampionList implements OnInit {
   async ngOnInit() {
     try {
       const [ddChamps, customChamps] = await Promise.all([
-        this.ddragon.getAllChampions() as Promise<Champion[]>,
+        this.ddragon.getVersion().then(() => this.ddragon.getAllChampions()),
         this.jsonService.getAllCustomChampions(),
       ]);
       const customMap = new Map(customChamps.map(c => [c.id, c]));
@@ -76,6 +76,9 @@ export class ChampionList implements OnInit {
   }
 
   getImageUrl(imageFull: string): string {
+    if (imageFull.startsWith('data:image')) {
+      return imageFull;
+    }
     return this.ddragon.getImageUrl(imageFull);
   }
 

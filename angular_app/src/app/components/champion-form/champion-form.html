@@ -1,83 +1,128 @@
 <div class="form-page">
-  <h1>{{ isEdit ? 'Edit — ' + form.value.name : 'New Champion' }}</h1>
+    <a routerLink="/admin" class="back-link">← Back to admin</a>
+    <h2>{{ isEdit ? 'Edit — ' + form.value.name : 'New Champion' }}</h2>
 
-  @if (error()) {
+    @if (error()) {
     <p class="error-msg">{{ error() }}</p>
-  }
+    }
 
-  @if (loading()) {
+    @if (loading()) {
     <p class="loading-msg">Loading…</p>
-  } @else {
+    } @else {
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-layout">
-      <!-- Basic fields -->
-      <div class="form-field">
-        <label for="id">ID</label>
-        <input id="id" formControlName="id" required [attr.disabled]="isEdit ? true : null" />
-      </div>
-      <div class="form-field">
-        <label for="key">Key</label>
-        <input id="key" formControlName="key" required />
-      </div>
-      <div class="form-field">
-        <label for="name">Name</label>
-        <input id="name" formControlName="name" required />
-      </div>
-      <div class="form-field">
-        <label for="title">Title</label>
-        <input id="title" formControlName="title" required />
-      </div>
-      <div class="form-field">
-        <label for="blurb">Description (blurb)</label>
-        <textarea id="blurb" formControlName="blurb" rows="5"></textarea>
-      </div>
-
-      <div class="form-field">
-        <label for="partype">Resource type</label>
-        <select id="partype" formControlName="partype">
-          @for (p of partypes; track p) {
-            <option [value]="p">{{ p || 'None' }}</option>
-          }
-        </select>
-      </div>
-
-      <!-- Roles (tags) -->
-      <fieldset class="form-fieldset">
-        <legend>Roles</legend>
-        @for (r of roles; track r) {
-          <label class="checkbox-row">
-            <input type="checkbox" [checked]="isTagChecked(r)" (change)="toggleTag(r)" />
-            {{ r }}
-          </label>
+        <!-- Basic fields -->
+        @if (isEdit) {
+        <div class="form-field">
+            <label for="id">ID</label>
+            <input id="id" formControlName="id" [attr.disabled]="true"/>
+        </div>
+        <div class="form-field">
+            <label for="key">Key</label>
+            <input id="key" formControlName="key" [attr.disabled]="true" />
+        </div>
         }
-      </fieldset>
+        <div class="form-field">
+            <label for="name">Name (unique)</label>
+            <input id="name" formControlName="name" />
+        </div>
 
-      <!-- Info sliders -->
-      <fieldset class="form-fieldset">
-        <legend>Info (0 – 10)</legend>
-        @for (stat of ['attack', 'defense', 'magic', 'difficulty']; track stat) {
-          <div class="range-row">
-            <label style="font-size:14px; min-width:80px; text-transform:capitalize">{{ stat }}</label>
-            <input type="range" min="0" max="10" [formControlName]="stat" formGroupName="info" />
-            <span>{{ form.get('info.' + stat)?.value }}</span>
-          </div>
+        <!-- Full image upload -->
+        <div class="form-field">
+            <label>Full image</label>
+            <input type="file" accept="image/*" (change)="onFullSelected($event)" />
+            @if (fullPreview()) {
+            <div class="image-preview">
+                <img [src]="fullPreview()" [width]="fullOutputWidth" [height]="fullOutputHeight" id="full-preview" /><br>
+                <button type="button" (click)="removeFull()">Remove</button>
+            </div>
+            }
+        </div>
+        <!-- Splash upload -->
+        <div class="form-field">
+            <label>Splash (large background)</label>
+            <input type="file" accept="image/*" (change)="onSplashSelected($event)" />
+            @if (splashPreview()) {
+            <div class="image-preview">
+                <img [src]="splashPreview()" width="fit-content" id="splash-preview" /><br>
+                <button type="button" (click)="removeSplash()">Remove</button>
+            </div>
+            }
+        </div>
+
+
+        <!-- Cropper modal (simplified: show inline when active) -->
+        @if (cropImageType) {
+        <div class="cropper-overlay">
+            <div class="cropper-container">
+                <h3>Crop {{ cropImageType }} image</h3>
+                <image-cropper [imageFile]="tempImageFile" [maintainAspectRatio]="true"
+                    [aspectRatio]="cropImageType === 'splash' ? 16/9 : 1"
+                    [resizeToWidth]="cropImageType === 'splash' ? splashOutputWidth : fullOutputWidth"
+                    [resizeToHeight]="cropImageType === 'splash' ? splashOutputHeight : fullOutputHeight"
+                    outputType="base64"
+                    [onlyScaleDown]="true" (imageCropped)="imageCropped($event)"></image-cropper>
+                <div class="cropper-actions">
+                    <button (click)="saveCroppedImage()">Save</button>
+                    <button (click)="cancelCrop()">Cancel</button>
+                </div>
+            </div>
+        </div>
         }
-      </fieldset>
 
-      <!-- Base Stats -->
-      <fieldset class="form-fieldset">
-        <legend>Base Stats</legend>
-        @for (statField of statFields; track statField[0]) {
-          <div class="form-field" style="margin-bottom:6px">
-            <label [for]="'stat-' + statField[0]">{{ statField[1] }}</label>
-            <input type="number" [id]="'stat-' + statField[0]" [formControlName]="statField[0]" formGroupName="stats" />
-          </div>
-        }
-      </fieldset>
+        <div class="form-field">
+            <label for="title">Title</label>
+            <input id="title" formControlName="title" required />
+        </div>
+        <div class="form-field">
+            <label for="blurb">Description (blurb)</label>
+            <textarea id="blurb" formControlName="blurb" rows="5"></textarea>
+        </div>
 
-      <div class="form-actions">
-        <button type="submit" class="btn-primary">{{ isEdit ? 'Save changes' : 'Create champion' }}</button>
-        <button type="button" class="btn-secondary" routerLink="/admin">Cancel</button>
-      </div>
+        <div class="form-field">
+            <label for="partype">Resource type</label>
+            <select id="partype" formControlName="partype">
+                @for (p of partypes; track p) {
+                <option [value]="p">{{ p || 'None' }}</option>
+                }
+            </select>
+        </div>
+
+        <!-- Roles (tags) -->
+        <fieldset class="form-fieldset">
+            <legend>Roles</legend>
+            @for (r of roles; track r) {
+            <label class="checkbox-row"><input type="checkbox" [checked]="isTagChecked(r)" (change)="toggleTag(r)" />{{
+                r }}</label>
+            }
+        </fieldset>
+
+        <!-- Info sliders -->
+        <fieldset class="form-fieldset">
+            <legend>Info (0 – 10)</legend>
+            @for (stat of ['attack', 'defense', 'magic', 'difficulty']; track stat) {
+            <div class="range-row" formGroupName="info">
+                <label style="font-size:14px; min-width:80px; text-transform:capitalize">{{ stat }}</label>
+                <input type="range" min="0" max="10" [formControlName]="stat" />
+                <span>{{ form.get('info.' + stat)?.value }}</span>
+            </div>
+            }
+        </fieldset>
+
+        <!-- Base Stats -->
+        <fieldset class="form-fieldset">
+            <legend>Base Stats</legend>
+            @for (statField of statFields; track statField[0]) {
+            <div class="form-field" style="margin-bottom:6px" formGroupName="stats">
+                <label [for]="'stat-' + statField[0]">{{ statField[1] }}: <input type="number"
+                        [id]="'stat-' + statField[0]" [formControlName]="statField[0]" /></label>
+            </div>
+            }
+        </fieldset>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">{{ isEdit ? 'Save changes' : 'Create champion' }}</button>
+            <button type="button" class="btn-secondary" routerLink="/admin">Cancel</button>
+        </div>
     </form>
-  }
+    }
 </div>

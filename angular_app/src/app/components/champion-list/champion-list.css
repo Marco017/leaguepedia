@@ -4,21 +4,25 @@
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 5px;
 }
+
 .champion-card {
   text-decoration: none;
   text-align: center;
   color: var(--text-h);
   transition: opacity 0.15s;
 }
+
 .champion-card:hover {
   opacity: 0.8;
 }
+
 .champion-card img {
   border-radius: 3px;
   display: block;
   width: 120px;
   margin: 0 auto;
 }
+
 .placeholder-img {
   width: 120px;
   height: 120px;
@@ -30,16 +34,19 @@
   font-size: 32px;
   margin: 0 auto;
 }
+
 .champion-card-name {
   margin-top: 0;
   font-size: 14px;
 }
+
 .filters-bar {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
   flex-wrap: wrap;
 }
+
 .filters-bar input,
 .filters-bar select {
   padding: 6px 10px;

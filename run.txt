@@ -1,2 +1,2 @@
-npm --run dev
-npm --run serve
+npx json-server db.json
+ng serve

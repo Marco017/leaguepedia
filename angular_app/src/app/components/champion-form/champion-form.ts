@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { JsonServerChampionService } from '../../services/json-server-champion';
 import { DataDragonService } from '../../services/data-dragon';
 import { Champion } from '../../models/champion.model';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 
 const ROLES = ['Fighter', 'Mage', 'Assassin', 'Tank', 'Support', 'Marksman'];
 const PARTYPES = [
@@ -26,10 +28,10 @@ const STAT_FIELDS: [keyof Champion['stats'], string][] = [
 @Component({
   selector: 'app-champion-form',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule, ImageCropperComponent],
   templateUrl: './champion-form.html',
   styleUrls: ['./champion-form.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChampionFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -38,13 +40,30 @@ export class ChampionFormComponent implements OnInit {
   private jsonService = inject(JsonServerChampionService);
   private ddragon = inject(DataDragonService);
 
+  // cropper state
+  cropImageType: 'splash' | 'full' | null = null;
+  tempImageFile: File | undefined;
+  croppedImage: string | null | undefined = null;
+
+  // cropper dimensions
+  splashOutputWidth = 881;
+  splashOutputHeight = 520;
+
+  fullOutputWidth = 128;
+  fullOutputHeight = 128;
+
+  // Previews
+  splashPreview = signal<string | null>(null);
+  fullPreview = signal<string | null>(null);
+
+  // form state
   isEdit = false;
   championId: string | null = null;
   error = signal('');
   loading = signal(false);
 
   form = this.fb.group({
-    id: [{ value: '', disabled: false }, Validators.required],
+    id: ['', Validators.required],
     key: ['', Validators.required],
     name: ['', Validators.required],
     title: ['', Validators.required],
@@ -65,6 +84,7 @@ export class ChampionFormComponent implements OnInit {
       y: [0],
       w: [48],
       h: [48],
+      splash: [''],
     }),
     stats: this.fb.group({
       hp: [0], hpperlevel: [0], mp: [0], mpperlevel: [0], movespeed: [0],
@@ -75,16 +95,23 @@ export class ChampionFormComponent implements OnInit {
     }),
   });
 
+  // Load champion if editing
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
+
     if (id) {
       this.isEdit = true;
       this.championId = id;
       this.loading.set(true);
+      //disable id and key fields in edit mode
+      this.form.get('id')?.disable();
+      this.form.get('key')?.disable();
+      console.log('DISABLED ID AND KEY FIELDS FOR EDIT MODE');
       try {
         const champion = await this.jsonService.getChampionById(id);
         this.form.patchValue(champion);
-        if (this.isEdit) this.form.get('id')?.disable();
+        // Set previews if images are base64
+        this.setPreviews(champion);
       } catch {
         this.error.set('Champion not found.');
       } finally {
@@ -93,6 +120,26 @@ export class ChampionFormComponent implements OnInit {
     }
   }
 
+  private sanitizeId(name: string): string {
+    return name.replace(/[^a-zA-Z]/g, '');
+  }
+  private randomKey(): number {
+    return Math.floor(Math.random() * 1000000);
+  }
+  private async isKeyUnique(key: number): Promise<boolean> {
+    const all = await this.jsonService.getAllCustomChampions();
+    return !all.some(c => Number(c.key) === key);
+  }
+
+  private setPreviews(champion: Champion) {
+    const image = champion.image;
+    if (image?.full && image.full.startsWith('data:image')) {
+      this.fullPreview.set(image.full);
+    }
+    if (image?.splash && image.splash.startsWith('data:image')) {
+      this.splashPreview.set(image.splash);
+    }
+  }
   toggleTag(tag: string) {
     const current = this.form.value.tags ?? [];
     const newTags = current.includes(tag)
@@ -106,24 +153,118 @@ export class ChampionFormComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.form.invalid) return;
-    this.error.set('');
-    const formValue = this.form.getRawValue(); // includes disabled id for edit
-
+    if (!this.isEdit) {
+      // Generate a unique numeric key for the new champion
+      var uniqueKey: number;
+      do {
+        uniqueKey = this.randomKey();
+      } while (!(await this.isKeyUnique(uniqueKey)));
+      this.form.get('key')?.setValue(String(uniqueKey));
+      // this.form.get('id')?.setValue(this.sanitizeId(this.form.value.name || ''));
+    }
+    const formValue = this.form.getRawValue();
+    if (this.form.invalid){
+      this.error.set('Please fill in all required fields.');
+      return;
+    }
     try {
       if (this.isEdit && this.championId) {
         await this.jsonService.updateChampion(this.championId, { ...formValue } as Champion);
       } else {
-        
+        const version = await this.ddragon.getVersion();
         await this.jsonService.createChampion({
-          ...formValue as Champion,
-          version: this.ddragon.getVersion(),
-        } as any);
+          ...formValue,
+          version: version as string,
+        } as Champion);
       }
       this.router.navigate(['/admin']);
     } catch {
       this.error.set('Error saving. Make sure the JSON Server is running.');
     }
+  }
+
+  // Splash file selected
+  onSplashSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.tempImageFile = file;
+    this.cropImageType = 'splash';
+  }
+
+  // Full image file selected
+  onFullSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.tempImageFile = file;
+    this.cropImageType = 'full';
+  }
+
+  // Store cropped image temporarily
+  async imageCropped(event: ImageCroppedEvent): Promise<void> {
+    var blob = event.blob as Blob;
+    console.log('Cropped image blob size:', blob.size);
+    if (blob.size > 50000) { // 50KB limited by json server
+      this.error.set('Image is too large. Please choose an image smaller than 50KB.');
+      // Reset the cropper state
+      this.cancelCrop();
+      // Also clear the file input
+      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.croppedImage = reader.result as string; // base64 string
+    };
+    reader.readAsDataURL(blob);
+  }
+
+  // Save cropped image (called from Save button)
+  saveCroppedImage(): void {
+    if (!this.croppedImage || !this.cropImageType) return;
+    const currentImage = this.form.getRawValue().image || {
+      full: '', sprite: '', splash: '', group: 'champion', x: 0, y: 0, w: 48, h: 48
+    };
+    if (this.cropImageType === 'splash') {
+      this.form.patchValue({
+        image: {
+          ...currentImage,
+          splash: this.croppedImage,
+        }
+      });
+      this.splashPreview.set(this.croppedImage);
+    } else if (this.cropImageType === 'full') {
+      this.form.patchValue({
+        image: {
+          ...currentImage,
+          full: this.croppedImage,
+        }
+      });
+      this.fullPreview.set(this.croppedImage);
+    }
+    // Close cropper and reset temp state
+    this.cropImageType = null;
+    this.tempImageFile = undefined;
+    this.croppedImage = null;
+  }
+
+  cancelCrop(): void {
+    this.cropImageType = null;
+    this.tempImageFile = undefined;
+    this.croppedImage = null;
+  }
+  removeSplash(): void {
+    this.form.patchValue({
+      image: { ...this.form.value.image, splash: '' }
+    });
+    this.splashPreview.set(null);
+  }
+
+  removeFull(): void {
+    this.form.patchValue({
+      image: { ...this.form.value.image, full: '' }
+    });
+    this.fullPreview.set(null);
   }
 
   protected readonly roles = ROLES;

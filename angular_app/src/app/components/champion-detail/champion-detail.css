@@ -1,26 +1,30 @@
 .detail-splash {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  padding: 2rem;
-  border-radius: 2px;
-  color: white;
-  text-shadow: 1px 1px black;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 2rem;
+    border-radius: 2px;
+    color: white;
+    text-shadow: 1px 1px black;
 }
+
 .detail-back {
-  display: inline-block;
-  margin-bottom: 0.75rem;
-  color: var(--accent);
-  text-decoration: none;
-  font-size: 14px;
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
 }
+
 .detail-back:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
+
 .detail-stats-list {
-  text-align: left;
+    text-align: left;
 }
+
 .subtitle {
-  font-style: italic;
-  margin-bottom: 1rem;
+    font-style: italic;
+    margin-bottom: 1rem;
 }

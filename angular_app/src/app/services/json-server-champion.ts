@@ -22,7 +22,7 @@ export class JsonServerChampionService {
     try {
       const url = new URL(`${this.BASE}/champions`);
       if (params.name) url.searchParams.append('name:contains', params.name);
-      if (params.tag) url.searchParams.append('tags:contains', params.tag);
+      // if (params.tag) url.searchParams.append('tags:contains', params.tag);
       if (params.partype) url.searchParams.append('partype:eq', params.partype);
       if (params.page) url.searchParams.append('_page', String(params.page));
       if (params.perPage) url.searchParams.append('_per_page', String(params.perPage));
