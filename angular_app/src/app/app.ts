@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { AuthService } from './services/auth';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +10,9 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('angular_app');
+  protected readonly auth = inject(AuthService);
+  
+  logout(): void {
+    this.auth.logout();
+  }
 }

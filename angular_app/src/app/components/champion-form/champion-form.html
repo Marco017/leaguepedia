@@ -62,8 +62,8 @@
                     outputType="base64"
                     [onlyScaleDown]="true" (imageCropped)="imageCropped($event)"></image-cropper>
                 <div class="cropper-actions">
-                    <button (click)="saveCroppedImage()">Save</button>
-                    <button (click)="cancelCrop()">Cancel</button>
+                    <button type="button" (click)="saveCroppedImage()">Save</button>
+                    <button type="button" (click)="cancelCrop()">Cancel</button>
                 </div>
             </div>
         </div>

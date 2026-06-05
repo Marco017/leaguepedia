@@ -1,0 +1,14 @@
+.nav-logout {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nav-logout:hover {
+  text-decoration: underline;
+}

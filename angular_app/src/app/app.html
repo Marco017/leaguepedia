@@ -1,6 +1,11 @@
 <nav class="nav">
   <a routerLink="/">Champions</a>
-  <a routerLink="/admin">Admin</a>
+  @if (auth.isAuthenticated()) {
+    <a routerLink="/admin">Admin</a>
+    <button class="nav-logout" (click)="logout()">Logout</button>
+  } @else {
+    <a routerLink="/login">Login</a>
+  }
 </nav>
 <h1 class="app-title">Leaguepedia</h1>
 <router-outlet />

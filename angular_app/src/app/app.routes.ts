@@ -3,33 +3,41 @@ import { ChampionDetailComponent } from './components/champion-detail/champion-d
 import { ChampionFormComponent } from './components/champion-form/champion-form';
 import { ChampionList } from './components/champion-list/champion-list';
 import { AdminList } from './components/admin-list/admin-list';
+import { LoginComponent } from './components/login/login';
+import { authGuard } from './services/authHandler';
 
 
 export const routes: Routes = [
     {
-        "path": "",
-        "redirectTo": "champions",
-        "pathMatch": "full"
+        path: '',
+        redirectTo: 'champions',
+        pathMatch: 'full',
     },
     {
-        "path": "champions",
-        "loadComponent": () => ChampionList
+        path: 'champions',
+        loadComponent: () => ChampionList,
     },
     {
-        "path": "champions/:id",
-        "loadComponent": () => ChampionDetailComponent
+        path: 'champions/:id',
+        loadComponent: () => ChampionDetailComponent,
     },
     {
-        "path": "admin",
-        "loadComponent": () => AdminList
+        path: 'login',
+        loadComponent: () => LoginComponent,
     },
     {
-        "path": "admin/new",    
-        "loadComponent": () => ChampionFormComponent
+        path: 'admin',
+        loadComponent: () => AdminList,
+        canActivate: [authGuard],
     },
     {
-        "path": "admin/edit/:id",
-        "loadComponent": () => ChampionFormComponent
-    }
-
+        path: 'admin/new',
+        loadComponent: () => ChampionFormComponent,
+        canActivate: [authGuard],
+    },
+    {
+        path: 'admin/edit/:id',
+        loadComponent: () => ChampionFormComponent,
+        canActivate: [authGuard],
+    },
 ];
