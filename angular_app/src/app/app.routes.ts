@@ -12,7 +12,7 @@ import { authHandler } from './services/authHandler';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'champions',
+        redirectTo: 'home',
         pathMatch: 'full',
     },
     {

@@ -1,103 +1,153 @@
-.detail-splash {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    padding: 2rem;
-    border-radius: 2px;
-    color: white;
-    text-shadow: 1px 1px black;
-}
-
 .detail-back {
-    display: inline-block;
-    margin-bottom: 0.75rem;
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 14px;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 14px;
 }
 
 .detail-back:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-.detail-stats-list {
-    text-align: left;
+.detail-splash {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 2rem;
+  border-radius: 4px;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .subtitle {
-    font-style: italic;
-    margin-bottom: 1rem;
+  font-style: italic;
+  margin-bottom: 1rem;
 }
 
-
-.detail-splash {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    padding: 2rem;
-    border-radius: 2px;
-    color: white;
-    text-shadow: 1px 1px black;
-}
-
-.detail-back {
-    display: inline-block;
-    margin-bottom: 0.75rem;
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.detail-back:hover {
-    text-decoration: underline;
-}
-
+/* ── Three-column body ── */
 .detail-body {
-    display: flex;
-    gap: 2rem;
-    align-items: flex-start;
-    margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 200px auto auto;
+  gap: 2rem;
+  align-items: start;
+  margin-top: 1.5rem;
 }
 
+/* Portrait */
 .detail-image-col {
-    flex-shrink: 0;
-    width: 240px;
-    height: 240px;
-    border-radius: 3px;
-    background: var(--accent-bg);
-    border: 1px solid var(--accent-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+  width: 200px;
+  height: 200px;
+  border-radius: 4px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
- 
+
 .detail-image-col img {
-    display: block;
-    width: 128px;
-    height: 128px;
-    image-rendering: pixelated;
-    transform: scale(1.8);
+  display: block;
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  transform: scale(1.6);
 }
 
-.detail-info-col {
-    flex: 2;
-    min-width: 0;
-}
-
+/* Shared list */
 .detail-stats-list {
-    text-align: left;
-    padding-left: 1.25rem;
-    margin: 0.5rem 0 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
 .detail-stats-list li {
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--text-h);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-h);
 }
 
-.subtitle {
-    font-style: italic;
-    margin-bottom: 1rem;
+/* FA icons */
+.stat-icon {
+  width: 16px;
+  text-align: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+/* Per-stat icon colours */
+.hp-icon     { color: #e53e3e; }
+.mana-icon   { color: #4299e1; }
+.ms-icon     { color: #48bb78; }
+.armor-icon  { color: #ecc94b; }
+.mr-icon     { color: #9f7aea; }
+.range-icon  { color: #ed8936; }
+.crit-icon   { color: #f6e05e; }
+.ad-icon     { color: #fc8181; }
+.as-icon     { color: #63b3ed; }
+.difficulty-icon { color: #fc8181; }
+
+.stat-label {
+  color: var(--text);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* Info bars */
+.stat-bar-wrap {
+  background: var(--border);
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.stat-bar {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.stat-bar.difficulty {
+  background: #e53e3e;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.difficulty-val {
+  color: #e53e3e;
+}
+
+/* Base stats — compact, no stretching */
+.base-stats li {
+  gap: 6px;
+  width: fit-content;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .detail-body {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-image-col {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+  }
 }

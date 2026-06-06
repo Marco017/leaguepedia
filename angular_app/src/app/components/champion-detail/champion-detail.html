@@ -6,6 +6,7 @@
     } @else if (error()) {
     <p class="error-msg">{{ error() }}</p>
     } @else if (champion(); as c) {
+
     <div class="detail-splash"
         [style.backgroundImage]="'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(' + getSplashUrl() + ')'">
         <h2 id="champion-name">{{ c.name }}</h2>
@@ -18,45 +19,158 @@
     <hr />
 
     <div class="detail-body">
-      <div class="detail-image-col">
-        <img [src]="getImageUrl()" [alt]="c.name" class="detail-image" />
-      </div>
 
-      <div class="detail-info-col">
-        <h2>Info</h2>
-        <ul class="detail-stats-list">
-            <li>Attack: {{ c.info.attack }}/10</li>
-            <li>Defense: {{ c.info.defense }}/10</li>
-            <li>Magic: {{ c.info.magic }}/10</li>
-            <li>Difficulty: {{ c.info.difficulty }}/10</li>
-        </ul>
-      </div>
-      
+        <!-- Portrait -->
+        <div class="detail-image-col">
+            <img [src]="getImageUrl()" [alt]="c.name" class="detail-image" />
+        </div>
+
+        <!-- Info bars -->
+        <div class="detail-info-col">
+            <h2>Info</h2>
+            <ul class="detail-stats-list">
+                <li>
+                    <i class="fa-solid fa-gavel stat-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Attack</span>
+                    <span class="stat-bar-wrap">
+                        <span class="stat-bar" [style.width]="(c.info.attack * 10) + '%'"></span>
+                    </span>
+                    <span class="stat-value">{{ c.info.attack }}/10</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-shield-halved stat-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Defense</span>
+                    <span class="stat-bar-wrap">
+                        <span class="stat-bar" [style.width]="(c.info.defense * 10) + '%'"></span>
+                    </span>
+                    <span class="stat-value">{{ c.info.defense }}/10</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-wand-sparkles stat-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Magic</span>
+                    <span class="stat-bar-wrap">
+                        <span class="stat-bar" [style.width]="(c.info.magic * 10) + '%'"></span>
+                    </span>
+                    <span class="stat-value">{{ c.info.magic }}/10</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-skull stat-icon difficulty-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Difficulty</span>
+                    <span class="stat-bar-wrap">
+                        <span class="stat-bar difficulty" [style.width]="(c.info.difficulty * 10) + '%'"></span>
+                    </span>
+                    <span class="stat-value difficulty-val">{{ c.info.difficulty }}/10</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Base Stats -->
+        <div class="detail-stats-col">
+            <h2>Base Stats</h2>
+            <ul class="detail-stats-list base-stats">
+                <li>
+                    <i class="fa-solid fa-heart stat-icon hp-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Health</span>
+                    <span class="stat-value">{{ c.stats.hp }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-heart-pulse stat-icon hp-icon" aria-hidden="true"></i>
+                    <span class="stat-label">HP / level</span>
+                    <span class="stat-value">{{ c.stats.hpperlevel }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-droplet stat-icon mana-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Mana</span>
+                    <span class="stat-value">{{ c.stats.mp }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-droplet stat-icon mana-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Mana / level</span>
+                    <span class="stat-value">{{ c.stats.mpperlevel }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-person-running stat-icon ms-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Move Speed</span>
+                    <span class="stat-value">{{ c.stats.movespeed }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-shield stat-icon armor-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Armor</span>
+                    <span class="stat-value">{{ c.stats.armor }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-shield stat-icon armor-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Armor / level</span>
+                    <span class="stat-value">{{ c.stats.armorperlevel }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-shield-halved stat-icon mr-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Magic Resist</span>
+                    <span class="stat-value">{{ c.stats.spellblock }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-shield-halved stat-icon mr-icon" aria-hidden="true"></i>
+                    <span class="stat-label">MR / level</span>
+                    <span class="stat-value">{{ c.stats.spellblockperlevel }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-crosshairs stat-icon range-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Attack Range</span>
+                    <span class="stat-value">{{ c.stats.attackrange }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-kit-medical stat-icon hp-icon" aria-hidden="true"></i>
+                    <span class="stat-label">HP Regen</span>
+                    <span class="stat-value">{{ c.stats.hpregen }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-kit-medical stat-icon hp-icon" aria-hidden="true"></i>
+                    <span class="stat-label">HP Regen / level</span>
+                    <span class="stat-value">{{ c.stats.hpregenperlevel }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-flask stat-icon mana-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Mana Regen</span>
+                    <span class="stat-value">{{ c.stats.mpregen }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-flask stat-icon mana-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Mana Regen / level</span>
+                    <span class="stat-value">{{ c.stats.mpregenperlevel }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-star stat-icon crit-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Crit Chance</span>
+                    <span class="stat-value">{{ c.stats.crit }}%</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-star stat-icon crit-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Crit / level</span>
+                    <span class="stat-value">{{ c.stats.critperlevel }}%</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-gavel stat-icon ad-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Attack Damage</span>
+                    <span class="stat-value">{{ c.stats.attackdamage }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-gavel stat-icon ad-icon" aria-hidden="true"></i>
+                    <span class="stat-label">AD / level</span>
+                    <span class="stat-value">{{ c.stats.attackdamageperlevel }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-bolt stat-icon as-icon" aria-hidden="true"></i>
+                    <span class="stat-label">Attack Speed</span>
+                    <span class="stat-value">{{ c.stats.attackspeed }}</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-bolt stat-icon as-icon" aria-hidden="true"></i>
+                    <span class="stat-label">AS / level</span>
+                    <span class="stat-value">{{ c.stats.attackspeedperlevel }}%</span>
+                </li>
+            </ul>
+        </div>
+
     </div>
-    <hr />
-
-        <h2>Base Stats</h2>
-        <ul class="detail-stats-list">
-            <li>Health: {{ c.stats.hp }}</li>
-            <li>Health per level: {{ c.stats.hpperlevel }}</li>
-            <li>Mana: {{ c.stats.mp }}</li>
-            <li>Mana per level: {{ c.stats.mpperlevel }}</li>
-            <li>Move Speed: {{ c.stats.movespeed }}</li>
-            <li>Armor: {{ c.stats.armor }}</li>
-            <li>Armor per level: {{ c.stats.armorperlevel }}</li>
-            <li>Magic Resist: {{ c.stats.spellblock }}</li>
-            <li>Magic Resist per level: {{ c.stats.spellblockperlevel }}</li>
-            <li>Attack Range: {{ c.stats.attackrange }}</li>
-            <li>HP Regeneration: {{ c.stats.hpregen }}</li>
-            <li>HP Regeneration per level: {{ c.stats.hpregenperlevel }}</li>
-            <li>Mana Regeneration: {{ c.stats.mpregen }}</li>
-            <li>Mana Regeneration per level: {{ c.stats.mpregenperlevel }}</li>
-            <li>Critical Strike Chance: {{ c.stats.crit }}%</li>
-            <li>Critical Strike Chance per level: {{ c.stats.critperlevel }}%</li>
-            <li>Attack Damage: {{ c.stats.attackdamage }}</li>
-            <li>Attack Damage per level: {{ c.stats.attackdamageperlevel }}</li>
-            <li>Attack Speed: {{ c.stats.attackspeed }}</li>
-            <li>Attack Speed per level: {{ c.stats.attackspeedperlevel }}%</li>
-        </ul>
     }
 </div>
