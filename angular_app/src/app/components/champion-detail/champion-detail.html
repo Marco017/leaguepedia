@@ -16,39 +16,47 @@
     </div>
 
     <hr />
-    <img [src]="getImageUrl()" [alt]="c.name" class="detail-image" />
-    <h2>Info</h2>
-    <ul class="detail-stats-list">
-        <li>Attack: {{ c.info.attack }}/10</li>
-        <li>Defense: {{ c.info.defense }}/10</li>
-        <li>Magic: {{ c.info.magic }}/10</li>
-        <li>Difficulty: {{ c.info.difficulty }}/10</li>
-    </ul>
 
+    <div class="detail-body">
+      <div class="detail-image-col">
+        <img [src]="getImageUrl()" [alt]="c.name" class="detail-image" />
+      </div>
+
+      <div class="detail-info-col">
+        <h2>Info</h2>
+        <ul class="detail-stats-list">
+            <li>Attack: {{ c.info.attack }}/10</li>
+            <li>Defense: {{ c.info.defense }}/10</li>
+            <li>Magic: {{ c.info.magic }}/10</li>
+            <li>Difficulty: {{ c.info.difficulty }}/10</li>
+        </ul>
+      </div>
+      
+    </div>
     <hr />
 
-    <h2>Base Stats</h2>
-    <ul class="detail-stats-list">
-        <li>Health: {{ c.stats.hp }}</li>
-        <li>Health per level: {{ c.stats.hpperlevel }}</li>
-        <li>Mana: {{ c.stats.mp }}</li>
-        <li>Mana per level: {{ c.stats.mpperlevel }}</li>
-        <li>Move Speed: {{ c.stats.movespeed }}</li>
-        <li>Armor: {{ c.stats.armor }}</li>
-        <li>Armor per level: {{ c.stats.armorperlevel }}</li>
-        <li>Magic Resist: {{ c.stats.spellblock }}</li>
-        <li>Magic Resist per level: {{ c.stats.spellblockperlevel }}</li>
-        <li>Attack Range: {{ c.stats.attackrange }}</li>
-        <li>HP Regeneration: {{ c.stats.hpregen }}</li>
-        <li>HP Regeneration per level: {{ c.stats.hpregenperlevel }}</li>
-        <li>Mana Regeneration: {{ c.stats.mpregen }}</li>
-        <li>Mana Regeneration per level: {{ c.stats.mpregenperlevel }}</li>
-        <li>Critical Strike Chance: {{ c.stats.crit }}%</li>
-        <li>Critical Strike Chance per level: {{ c.stats.critperlevel }}%</li>
-        <li>Attack Damage: {{ c.stats.attackdamage }}</li>
-        <li>Attack Damage per level: {{ c.stats.attackdamageperlevel }}</li>
-        <li>Attack Speed: {{ c.stats.attackspeed }}</li>
-        <li>Attack Speed per level: {{ c.stats.attackspeedperlevel }}%</li>
-    </ul>
+        <h2>Base Stats</h2>
+        <ul class="detail-stats-list">
+            <li>Health: {{ c.stats.hp }}</li>
+            <li>Health per level: {{ c.stats.hpperlevel }}</li>
+            <li>Mana: {{ c.stats.mp }}</li>
+            <li>Mana per level: {{ c.stats.mpperlevel }}</li>
+            <li>Move Speed: {{ c.stats.movespeed }}</li>
+            <li>Armor: {{ c.stats.armor }}</li>
+            <li>Armor per level: {{ c.stats.armorperlevel }}</li>
+            <li>Magic Resist: {{ c.stats.spellblock }}</li>
+            <li>Magic Resist per level: {{ c.stats.spellblockperlevel }}</li>
+            <li>Attack Range: {{ c.stats.attackrange }}</li>
+            <li>HP Regeneration: {{ c.stats.hpregen }}</li>
+            <li>HP Regeneration per level: {{ c.stats.hpregenperlevel }}</li>
+            <li>Mana Regeneration: {{ c.stats.mpregen }}</li>
+            <li>Mana Regeneration per level: {{ c.stats.mpregenperlevel }}</li>
+            <li>Critical Strike Chance: {{ c.stats.crit }}%</li>
+            <li>Critical Strike Chance per level: {{ c.stats.critperlevel }}%</li>
+            <li>Attack Damage: {{ c.stats.attackdamage }}</li>
+            <li>Attack Damage per level: {{ c.stats.attackdamageperlevel }}</li>
+            <li>Attack Speed: {{ c.stats.attackspeed }}</li>
+            <li>Attack Speed per level: {{ c.stats.attackspeedperlevel }}%</li>
+        </ul>
     }
 </div>

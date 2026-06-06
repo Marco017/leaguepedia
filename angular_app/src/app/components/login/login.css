@@ -17,13 +17,12 @@
 }
 
 .login-card h2 {
-  text-align: center;
+  text-align: left;
   margin-bottom: 0.25rem;
   font-size: 22px;
 }
-
 .login-subtitle {
-  text-align: center;
+  text-align: left;
   font-size: 13px;
   color: var(--text);
   margin-bottom: 2rem;
@@ -92,3 +91,5 @@
   font-size: 13px;
   margin-bottom: 0.25rem;
 }
+
+

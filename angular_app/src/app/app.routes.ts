@@ -4,7 +4,9 @@ import { ChampionFormComponent } from './components/champion-form/champion-form'
 import { ChampionList } from './components/champion-list/champion-list';
 import { AdminList } from './components/admin-list/admin-list';
 import { LoginComponent } from './components/login/login';
+import { HomeComponent } from './components/home/home';
 import { authHandler } from './services/authHandler';
+
 
 
 export const routes: Routes = [
@@ -12,6 +14,10 @@ export const routes: Routes = [
         path: '',
         redirectTo: 'champions',
         pathMatch: 'full',
+    },
+    {
+        path: 'home',
+        loadComponent: () => HomeComponent,
     },
     {
         path: 'champions',
