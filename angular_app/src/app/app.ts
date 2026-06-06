@@ -11,7 +11,7 @@ import { AuthService } from './services/auth';
 export class App {
   protected readonly title = signal('angular_app');
   protected readonly auth = inject(AuthService);
-  
+
   logout(): void {
     this.auth.logout();
   }

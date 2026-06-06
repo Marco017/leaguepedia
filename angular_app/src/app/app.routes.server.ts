@@ -4,5 +4,18 @@ export const serverRoutes: ServerRoute[] = [
   {
     path: '**',
     renderMode: RenderMode.Prerender
-  }
+  },
+  {
+    path: 'admin',
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: 'admin/new',
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: 'admin/edit/:id',
+    renderMode: RenderMode.Client,
+  },
+
 ];

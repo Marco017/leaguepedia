@@ -4,7 +4,7 @@ import { ChampionFormComponent } from './components/champion-form/champion-form'
 import { ChampionList } from './components/champion-list/champion-list';
 import { AdminList } from './components/admin-list/admin-list';
 import { LoginComponent } from './components/login/login';
-import { authGuard } from './services/authHandler';
+import { authHandler } from './services/authHandler';
 
 
 export const routes: Routes = [
@@ -28,16 +28,16 @@ export const routes: Routes = [
     {
         path: 'admin',
         loadComponent: () => AdminList,
-        canActivate: [authGuard],
+        canActivate: [authHandler],
     },
     {
         path: 'admin/new',
         loadComponent: () => ChampionFormComponent,
-        canActivate: [authGuard],
+        canActivate: [authHandler],
     },
     {
         path: 'admin/edit/:id',
         loadComponent: () => ChampionFormComponent,
-        canActivate: [authGuard],
+        canActivate: [authHandler],
     },
 ];

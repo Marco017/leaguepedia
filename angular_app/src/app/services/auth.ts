@@ -38,6 +38,7 @@ export class AuthService {
     this._isAuthenticated.set(false);
     if (isPlatformBrowser(this.platformId)) {
       sessionStorage.removeItem(SESSION_KEY);
+      window.location.href = '/';
     }
   }
 }
