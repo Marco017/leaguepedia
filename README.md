@@ -1,2 +1,2 @@
 # leaguepedia
-React Website to consult game characters
+Angular Website to consult game characters

@@ -53,8 +53,12 @@
                 <td>{{ c.tags.join(', ') }}</td>
                 <td>
                     <div class="table-actions">
-                        <a [routerLink]="['/admin/edit', c.id]">Edit</a>
-                        <button class="btn-delete" (click)="deleteChampion(c.id)">Delete</button>
+                        <a [routerLink]="['/admin/edit', c.id]" title="Edit" aria-label="Edit">
+                            <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+                        </a>
+                        <button class="btn-delete" (click)="deleteChampion(c.id)" title="Delete" aria-label="Delete">
+                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </td>
             </tr>

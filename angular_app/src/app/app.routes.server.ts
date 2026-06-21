@@ -2,10 +2,6 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
   {
-    path: '**',
-    renderMode: RenderMode.Prerender
-  },
-  {
     path: 'admin',
     renderMode: RenderMode.Client,
   },
@@ -17,5 +13,13 @@ export const serverRoutes: ServerRoute[] = [
     path: 'admin/edit/:id',
     renderMode: RenderMode.Client,
   },
-
+  {
+    // Dynamic param route: render on demand instead of prerendering.
+    path: 'champions/:id',
+    renderMode: RenderMode.Server,
+  },
+  {
+    path: '**',
+    renderMode: RenderMode.Prerender,
+  },
 ];

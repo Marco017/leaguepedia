@@ -4,7 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 // Hardcoded admin credentials
 const ADMIN_USERNAME = 'admin';
 const ADMIN_PASSWORD = 'marco';
-const SESSION_KEY = 'lp_admin_auth';
+const SESSION_KEY = 'admin_auth';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

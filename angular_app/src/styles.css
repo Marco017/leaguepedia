@@ -265,10 +265,9 @@ code {
 /* ── Admin table ── */
 .admin-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 1rem;
 }
+
 
 .admin-header a {
   color: var(--accent);
@@ -343,7 +342,7 @@ code {
 /* ── Form ── */
 .form-page {
   padding: 1rem;
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   text-align: left;
 }

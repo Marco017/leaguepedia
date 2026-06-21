@@ -10,6 +10,9 @@
     <p class="loading-msg">Loading…</p>
     } @else {
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-layout">
+        <div class="form-grid">
+        <!-- Left column -->
+        <div class="form-col">
         <!-- Basic fields -->
         @if (isEdit) {
         <div class="form-field">
@@ -49,26 +52,6 @@
             }
         </div>
 
-
-        <!-- Cropper modal (simplified: show inline when active) -->
-        @if (cropImageType) {
-        <div class="cropper-overlay">
-            <div class="cropper-container">
-                <h3>Crop {{ cropImageType }} image</h3>
-                <image-cropper [imageFile]="tempImageFile" [maintainAspectRatio]="true"
-                    [aspectRatio]="cropImageType === 'splash' ? 16/9 : 1"
-                    [resizeToWidth]="cropImageType === 'splash' ? splashOutputWidth : fullOutputWidth"
-                    [resizeToHeight]="cropImageType === 'splash' ? splashOutputHeight : fullOutputHeight"
-                    outputType="base64"
-                    [onlyScaleDown]="true" (imageCropped)="imageCropped($event)"></image-cropper>
-                <div class="cropper-actions">
-                    <button type="button" (click)="saveCroppedImage()">Save</button>
-                    <button type="button" (click)="cancelCrop()">Cancel</button>
-                </div>
-            </div>
-        </div>
-        }
-
         <div class="form-field">
             <label for="title">Title</label>
             <input id="title" formControlName="title" required />
@@ -95,7 +78,10 @@
                 r }}</label>
             }
         </fieldset>
+        </div>
 
+        <!-- Right column -->
+        <div class="form-col">
         <!-- Info sliders -->
         <fieldset class="form-fieldset">
             <legend>Info (0 – 10)</legend>
@@ -118,6 +104,27 @@
             </div>
             }
         </fieldset>
+        </div>
+        </div>
+
+        <!-- Cropper modal (simplified: show inline when active) -->
+        @if (cropImageType) {
+        <div class="cropper-overlay">
+            <div class="cropper-container">
+                <h3>Crop {{ cropImageType }} image</h3>
+                <image-cropper [imageFile]="tempImageFile" [maintainAspectRatio]="true"
+                    [aspectRatio]="cropImageType === 'splash' ? 16/9 : 1"
+                    [resizeToWidth]="cropImageType === 'splash' ? splashOutputWidth : fullOutputWidth"
+                    [resizeToHeight]="cropImageType === 'splash' ? splashOutputHeight : fullOutputHeight"
+                    outputType="base64"
+                    [onlyScaleDown]="true" (imageCropped)="imageCropped($event)"></image-cropper>
+                <div class="cropper-actions">
+                    <button type="button" (click)="saveCroppedImage()">Save</button>
+                    <button type="button" (click)="cancelCrop()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        }
 
         <div class="form-actions">
             <button type="submit" class="btn-primary">{{ isEdit ? 'Save changes' : 'Create champion' }}</button>

@@ -106,7 +106,6 @@ export class ChampionFormComponent implements OnInit {
       //disable id and key fields in edit mode
       this.form.get('id')?.disable();
       this.form.get('key')?.disable();
-      console.log('DISABLED ID AND KEY FIELDS FOR EDIT MODE');
       try {
         const champion = await this.jsonService.getChampionById(id);
         this.form.patchValue(champion);
@@ -153,20 +152,22 @@ export class ChampionFormComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (!this.isEdit) {
+    // Derive id from name before validating so the required id control is filled.
+    if (!this.isEdit) { // necessary to validate id field in create mode
+      this.form.get('id')?.setValue(this.sanitizeId(this.form.value.name || ''));
       // Generate a unique numeric key for the new champion
-      var uniqueKey: number;
+      let uniqueKey: number;
       do {
         uniqueKey = this.randomKey();
       } while (!(await this.isKeyUnique(uniqueKey)));
       this.form.get('key')?.setValue(String(uniqueKey));
-      // this.form.get('id')?.setValue(this.sanitizeId(this.form.value.name || ''));
     }
-    const formValue = this.form.getRawValue();
+    
     if (this.form.invalid){
       this.error.set('Please fill in all required fields.');
       return;
     }
+    const formValue = this.form.getRawValue();
     try {
       if (this.isEdit && this.championId) {
         await this.jsonService.updateChampion(this.championId, { ...formValue } as Champion);
@@ -201,8 +202,7 @@ export class ChampionFormComponent implements OnInit {
 
   // Store cropped image temporarily
   async imageCropped(event: ImageCroppedEvent): Promise<void> {
-    var blob = event.blob as Blob;
-    console.log('Cropped image blob size:', blob.size);
+    const blob = event.blob as Blob;
     if (blob.size > 50000) { // 50KB limited by json server
       this.error.set('Image is too large. Please choose an image smaller than 50KB.');
       // Reset the cropper state
